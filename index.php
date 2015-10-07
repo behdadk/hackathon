@@ -26,7 +26,11 @@ $app->post("/splittest", function () use ($app, $twig, $pdo) {
     $statement->bindParam(":element_id", $content["splittest"]["elementID"], \PDO::PARAM_STR);
     $statement->execute();
 
-    echo json_encode($pdo->lastInsertId());
+    $response = array(
+        'id' => (int)$pdo->lastInsertId()
+    );
+
+    echo json_encode($response);
 });
 
 $app->post("/variation", function () use ($app, $twig, $pdo) {
@@ -40,7 +44,11 @@ $app->post("/variation", function () use ($app, $twig, $pdo) {
     $statement->bindParam(":content", $content["variation"]["content"], \PDO::PARAM_STR);
     $statement->execute();
 
-    echo json_encode($pdo->lastInsertId());
+    $response = array(
+        'id' => (int)$pdo->lastInsertId()
+    );
+
+    echo json_encode($response);
 });
 
 $app->get("/show/variation/:variation_id", function ($variationId) use ($pdo) {

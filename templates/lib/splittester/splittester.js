@@ -1,5 +1,4 @@
-function SplitTester()
-{
+function SplitTester() {
     this.menu;
     this.originalVariant;
     this.selectedVariant = 0;
@@ -20,39 +19,36 @@ function SplitTester()
     this.setupModalEvents();
 }
 
-SplitTester.prototype.setupModalEvents = function()
-{
+SplitTester.prototype.setupModalEvents = function () {
     var owner = this;
 
-    jQuery(document.body).on("click", ".splittest-modal-variant", function() {
+    jQuery(document.body).on("click", ".splittest-modal-variant", function () {
         owner.changeVariant(jQuery(this));
     });
 
-    jQuery(document.body).on("click", "#splittest-modal-button-add", function() {
+    jQuery(document.body).on("click", "#splittest-modal-button-add", function () {
         owner.addVariant();
     });
 
-    jQuery(document.body).on("click", "#splittest-modal-bar", function() {
+    jQuery(document.body).on("click", "#splittest-modal-bar", function () {
         owner.postSplitTest();
     });
 };
 
-SplitTester.prototype.createRectangle = function()
-{
+SplitTester.prototype.createRectangle = function () {
     this.rectangle = jQuery(
         '<div id="selector">' +
-            '<div id="selector-top"></div>' +
-            '<div id="selector-left"></div>' +
-            '<div id="selector-right"></div>' +
-            '<div id="selector-bottom"></div>' +
+        '<div id="selector-top"></div>' +
+        '<div id="selector-left"></div>' +
+        '<div id="selector-right"></div>' +
+        '<div id="selector-bottom"></div>' +
         '</div>'
     );
 
     jQuery('body').append(this.rectangle);
 };
 
-SplitTester.prototype.createModal = function()
-{
+SplitTester.prototype.createModal = function () {
     $existingModal = jQuery("#splittest-modal");
 
     if ($existingModal.length) {
@@ -61,27 +57,26 @@ SplitTester.prototype.createModal = function()
 
     this.modal = jQuery(
         '<div id="splittest-modal">' +
-            '<div id="splittest-modal-bar">Save</div>' +
-            '<div id="splittest-modal-menu">' +
-                '<div id="splittest-modal-variants">' +
-                    '<div id="splittest-modal-variant-0" class="splittest-modal-variant">Original</div>' +
-                '</div>' +
-                '<div id="splittest-modal-button-add">Add Variant</div>' +
-            '</div>' +
-            '<div id="splittest-modal-code"><textarea id="splittest-modal-input" name="splittest-modal-input"></textarea></div>' +
+        '<div id="splittest-modal-bar">Save</div>' +
+        '<div id="splittest-modal-menu">' +
+        '<div id="splittest-modal-variants">' +
+        '<div id="splittest-modal-variant-0" class="splittest-modal-variant">Original</div>' +
+        '</div>' +
+        '<div id="splittest-modal-button-add">Add Variant</div>' +
+        '</div>' +
+        '<div id="splittest-modal-code"><textarea id="splittest-modal-input" name="splittest-modal-input"></textarea></div>' +
         '</div>'
     );
 
     jQuery('body').append(this.modal);
 };
 
-SplitTester.prototype.createMenu = function()
-{
+SplitTester.prototype.createMenu = function () {
     this.menu = jQuery(
         '<div id="splittest-menu">' +
-            '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
-            '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
-            '<a href="#splittest-modal" rel="modal:open"><img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" /></a>' +
+        '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
+        '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
+        '<a href="#splittest-modal" rel="modal:open"><img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" /></a>' +
         '</div>'
     );
 
@@ -89,21 +84,19 @@ SplitTester.prototype.createMenu = function()
     this.menu.hide();
 };
 
-SplitTester.prototype.startMouseListening = function()
-{
+SplitTester.prototype.startMouseListening = function () {
     var owner = this;
 
-    $(document).mousemove(function(event) {
+    $(document).mousemove(function (event) {
         owner.moveRectangle(event);
     });
 
-    $(document).click(function(event) {
+    $(document).click(function (event) {
         owner.selectElement(event);
     });
 };
 
-SplitTester.prototype.selectElement = function(event)
-{
+SplitTester.prototype.selectElement = function (event) {
     var owner = this;
     var $target = jQuery(event.target);
 
@@ -130,13 +123,12 @@ SplitTester.prototype.selectElement = function(event)
     owner.getElementPath(event);
 };
 
-SplitTester.prototype.unselectAllElements = function() {
+SplitTester.prototype.unselectAllElements = function () {
     $selectedElements = jQuery(".selected-split-test");
     $selectedElements.removeClass("selected-split-test");
 };
 
-SplitTester.prototype.getOriginalContent = function(event)
-{
+SplitTester.prototype.getOriginalContent = function (event) {
     this.createModal();
     this.changeToVariant(0);
     this.originalVariant = event.target.outerHTML;
@@ -144,7 +136,7 @@ SplitTester.prototype.getOriginalContent = function(event)
     jQuery("#splittest-modal-input").val(this.originalVariant);
 };
 
-SplitTester.prototype.showMenu = function(event) {
+SplitTester.prototype.showMenu = function (event) {
     targetPosition = event.target.getBoundingClientRect();
 
     this.menu.css("left", targetPosition.right);
@@ -152,8 +144,7 @@ SplitTester.prototype.showMenu = function(event) {
     this.menu.show();
 };
 
-SplitTester.prototype.moveRectangle = function(event)
-{
+SplitTester.prototype.moveRectangle = function (event) {
     var owner = this;
 
     if (jQuery('.selected-split-test').length) {
@@ -171,8 +162,7 @@ SplitTester.prototype.moveRectangle = function(event)
     owner.applyRectangleMovement($target);
 };
 
-SplitTester.prototype.validateHoveredElement = function(event)
-{
+SplitTester.prototype.validateHoveredElement = function (event) {
     return !(event.target.id.indexOf('selector') !== -1 ||
         event.target.tagName === 'BODY' ||
         event.target.tagName === 'HTML' ||
@@ -182,40 +172,40 @@ SplitTester.prototype.validateHoveredElement = function(event)
     );
 };
 
-SplitTester.prototype.applyRectangleMovement = function($target)
-{
+SplitTester.prototype.applyRectangleMovement = function ($target) {
     targetOffset = $target[0].getBoundingClientRect(),
         targetHeight = targetOffset.height,
-        targetWidth  = targetOffset.width;
+        targetWidth = targetOffset.width;
 
     this.elements.top.css({
-        left:  (targetOffset.left - 4),
-        top:   (targetOffset.top - 4),
+        left: (targetOffset.left - 4),
+        top: (targetOffset.top - 4),
         width: (targetWidth + 5)
     });
     this.elements.bottom.css({
-        top:   (targetOffset.top + targetHeight + 1),
-        left:  (targetOffset.left  - 3),
+        top: (targetOffset.top + targetHeight + 1),
+        left: (targetOffset.left - 3),
         width: (targetWidth + 4)
     });
     this.elements.left.css({
-        left:   (targetOffset.left  - 5),
-        top:    (targetOffset.top  - 4),
+        left: (targetOffset.left - 5),
+        top: (targetOffset.top - 4),
         height: (targetHeight + 8)
     });
     this.elements.right.css({
-        left:   (targetOffset.left + targetWidth + 1),
-        top:    (targetOffset.top  - 4),
+        left: (targetOffset.left + targetWidth + 1),
+        top: (targetOffset.top - 4),
         height: (targetHeight + 8)
     });
 };
 
-SplitTester.prototype.getElementPath = function(e)
-{
+SplitTester.prototype.getElementPath = function (e) {
     e.preventDefault();
     clickedElement = e.target;
 
     var elementId = this.getElementId(clickedElement);
+
+    console.log(elementId);
 
     if (!elementId) {
         alert("This element cannot be selected. Please, try another one.");
@@ -232,8 +222,7 @@ SplitTester.prototype.getElementPath = function(e)
  * @param element
  * @returns {*}
  */
-SplitTester.prototype.getElementId = function(element)
-{
+SplitTester.prototype.getElementId = function (element) {
     var elementId = clickedElement.getAttribute("id");
 
     if (!elementId) {
@@ -249,12 +238,10 @@ SplitTester.prototype.getElementId = function(element)
  * @param element
  * @returns {string}
  */
-SplitTester.prototype.getXPath = function(element )
-{
-    var val=element.value;
+SplitTester.prototype.getXPath = function (element) {
+    var val = element.value;
     var xpath = '';
-    for ( ; element && element.nodeType == 1; element = element.parentNode )
-    {
+    for (; element && element.nodeType == 1; element = element.parentNode) {
         //alert(element);
         var id = $(element.parentNode).children(element.tagName).index(element) + 1;
         id > 1 ? (id = '[' + id + ']') : (id = '');
@@ -263,27 +250,24 @@ SplitTester.prototype.getXPath = function(element )
     return xpath;
 };
 
-SplitTester.prototype.addVariant = function()
-{
+SplitTester.prototype.addVariant = function () {
     $variantsList = jQuery("#splittest-modal-variants");
     var numberOfVariants = $variantsList.find("div").length;
-    $newVariant = jQuery('<div id="splittest-modal-variant-'+numberOfVariants+'" class="splittest-modal-variant">Variant '+numberOfVariants+'</div>');
+    $newVariant = jQuery('<div id="splittest-modal-variant-' + numberOfVariants + '" class="splittest-modal-variant">Variant ' + numberOfVariants + '</div>');
 
     $variantsList.append($newVariant);
     this.changeToVariant(numberOfVariants);
 };
 
-SplitTester.prototype.changeVariant = function($clicked)
-{
+SplitTester.prototype.changeVariant = function ($clicked) {
     /* Finds newly selected variant */
     var idArray = $clicked.attr("id").split("-");
-    var newlySelected = idArray[idArray.length-1];
+    var newlySelected = idArray[idArray.length - 1];
 
     this.changeToVariant(newlySelected);
 };
 
-SplitTester.prototype.changeToVariant = function(newlySelected)
-{
+SplitTester.prototype.changeToVariant = function (newlySelected) {
     $textArea = jQuery("#splittest-modal-input");
 
     /* Finds previously selected variant */
@@ -306,10 +290,9 @@ SplitTester.prototype.changeToVariant = function(newlySelected)
     this.changeSelectedBackground(previouslySelected, newlySelected);
 };
 
-SplitTester.prototype.changeSelectedBackground = function(from, to)
-{
-    $from = jQuery("#splittest-modal-variant-"+ from);
-    $to = jQuery("#splittest-modal-variant-"+ to);
+SplitTester.prototype.changeSelectedBackground = function (from, to) {
+    $from = jQuery("#splittest-modal-variant-" + from);
+    $to = jQuery("#splittest-modal-variant-" + to);
 
     $from.css("background-color", "");
     $from.css("color", "white");
@@ -317,55 +300,44 @@ SplitTester.prototype.changeSelectedBackground = function(from, to)
     $to.css("color", "black");
 };
 
-SplitTester.prototype.postSplitTest = function()
-{
-    console.log({
-    url: window.location.href,
-        elementID: this.elementID
-});
-    $.ajax({
-        type: "POST",
-        url: "/splittest",
-        data: {
+SplitTester.prototype.postSplitTest = function () {
+    var owner = this;
+
+    var requestBody = JSON.stringify({
+        splittest: {
             url: window.location.href,
             elementID: this.elementID
-        },
-        dataType: "json",
-        done: function(data) {
-            owner.postVariations(data.id);
-        },
-        fail: function(error) {
-            alert("Error while trying to save Split Test.");
         }
+    });
+
+    console.log("TEST", requestBody);
+
+    $.post("/splittest", requestBody).done(function (data) {
+        data = JSON.parse(data);
+        owner.postVariations(data.id);
     });
 };
 
-SplitTester.prototype.postVariations = function(splitTestId)
-{
-    for (i in this.variants) {
+SplitTester.prototype.postVariations = function (splitTestId) {
+    this.changeToVariant(0);
+
+    for (i = 1; i < this.variants.length; i++) {
         this.postVariation(this.variants[i], splitTestId);
     }
 };
 
-SplitTester.prototype.postVariation = function(variation, splitTestId)
-{
-    $.ajax({
-        type: "POST",
-        url: "/variation",
-        data: {
-            variation: {
-                splitTestID: splitTestId,
-                title: "Variation from Split Test #" + splitTestId,
-                content: ""
-            }
-        },
-        dataType: "json",
-        done: function(data) {
-            console.log("Variation posted successfully.");
-        },
-        fail: function(error) {
-            alert("Error while trying to save Variation.");
+SplitTester.prototype.postVariation = function (variation, splitTestId) {
+    var requestBody = JSON.stringify({
+        variation: {
+            splitTestID: splitTestId,
+            title: "Variation from Split Test #" + splitTestId,
+            content: variation
         }
+    });
+
+    $.post("/variation", requestBody).done(function (data) {
+        data = JSON.parse(data);
+        console.log(data);
     });
 };
 
