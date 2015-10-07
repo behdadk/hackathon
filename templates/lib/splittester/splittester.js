@@ -1,3 +1,10 @@
+/**
+ * Allows page to be used with a selector for AB Tests with different
+ * elements from it.
+ *
+ * @name SplitTester
+ * @constructor
+ */
 function SplitTester() {
     this.menu;
     this.originalVariant;
@@ -19,6 +26,11 @@ function SplitTester() {
     this.setupModalEvents();
 }
 
+/**
+ * Adds and setups events for the modal.
+ *
+ * @name setupModalEvents
+ */
 SplitTester.prototype.setupModalEvents = function () {
     var owner = this;
 
@@ -35,6 +47,11 @@ SplitTester.prototype.setupModalEvents = function () {
     });
 };
 
+/**
+ * Creates rectangle that will be around hovered elements.
+ *
+ * @name createRectangle
+ */
 SplitTester.prototype.createRectangle = function () {
     this.rectangle = jQuery(
         '<div id="selector">' +
@@ -48,6 +65,11 @@ SplitTester.prototype.createRectangle = function () {
     jQuery('body').append(this.rectangle);
 };
 
+/**
+ * Creates modal that will be shown when an element is selected.
+ *
+ * @name createModal
+ */
 SplitTester.prototype.createModal = function () {
     $existingModal = jQuery("#splittest-modal");
 
@@ -71,6 +93,11 @@ SplitTester.prototype.createModal = function () {
     jQuery('body').append(this.modal);
 };
 
+/**
+ * Creates menu that will show for a selected element.
+ *
+ * @name createMenu
+ */
 SplitTester.prototype.createMenu = function () {
     this.menu = jQuery(
         '<div id="splittest-menu">' +
@@ -84,6 +111,11 @@ SplitTester.prototype.createMenu = function () {
     this.menu.hide();
 };
 
+/**
+ * Activates everything.
+ *
+ * @name startMouseListening
+ */
 SplitTester.prototype.startMouseListening = function () {
     var owner = this;
 
@@ -96,6 +128,12 @@ SplitTester.prototype.startMouseListening = function () {
     });
 };
 
+/**
+ * Selects (or unselects) an element after a click.
+ *
+ * @name selectElement
+ * @param event
+ */
 SplitTester.prototype.selectElement = function (event) {
     var owner = this;
     var $target = jQuery(event.target);
@@ -123,11 +161,22 @@ SplitTester.prototype.selectElement = function (event) {
     owner.getElementPath(event);
 };
 
+/**
+ * Unselects all selected elements.
+ *
+ * @name unselectAllElements
+ */
 SplitTester.prototype.unselectAllElements = function () {
     $selectedElements = jQuery(".selected-split-test");
     $selectedElements.removeClass("selected-split-test");
 };
 
+/**
+ * Gets html content from selected element.
+ *
+ * @name getOriginalContent
+ * @param event
+ */
 SplitTester.prototype.getOriginalContent = function (event) {
     this.createModal();
     this.changeToVariant(0);
@@ -136,6 +185,12 @@ SplitTester.prototype.getOriginalContent = function (event) {
     jQuery("#splittest-modal-input").val(this.originalVariant);
 };
 
+/**
+ * Shows menu for selected element.
+ *
+ * @name showMenu
+ * @param event
+ */
 SplitTester.prototype.showMenu = function (event) {
     targetPosition = event.target.getBoundingClientRect();
 
@@ -144,6 +199,12 @@ SplitTester.prototype.showMenu = function (event) {
     this.menu.show();
 };
 
+/**
+ * Moves rectangle through elements as mouse moves.
+ *
+ * @name moveRectangle
+ * @param event
+ */
 SplitTester.prototype.moveRectangle = function (event) {
     var owner = this;
 
@@ -162,6 +223,13 @@ SplitTester.prototype.moveRectangle = function (event) {
     owner.applyRectangleMovement($target);
 };
 
+/**
+ * Validates if hovered element should be marked for possible selection.
+ *
+ * @name validateHoveredElement
+ * @param event
+ * @returns {boolean}
+ */
 SplitTester.prototype.validateHoveredElement = function (event) {
     return !(event.target.id.indexOf('selector') !== -1 ||
         event.target.tagName === 'BODY' ||
@@ -172,6 +240,12 @@ SplitTester.prototype.validateHoveredElement = function (event) {
     );
 };
 
+/**
+ * Transforms divs into right sized rectangle as mouse hovers.
+ *
+ * @name applyRectangleMovement
+ * @param $target
+ */
 SplitTester.prototype.applyRectangleMovement = function ($target) {
     targetOffset = $target[0].getBoundingClientRect(),
         targetHeight = targetOffset.height,
@@ -199,6 +273,12 @@ SplitTester.prototype.applyRectangleMovement = function ($target) {
     });
 };
 
+/**
+ * Finds and stores element path that will be sent to the database for the Split Test.
+ *
+ * @name getElementPath
+ * @param e
+ */
 SplitTester.prototype.getElementPath = function (e) {
     e.preventDefault();
     clickedElement = e.target;
@@ -219,6 +299,7 @@ SplitTester.prototype.getElementPath = function (e) {
 /**
  * Tries to find the element ID, if any, and then returns the CSS selector with it.
  *
+ * @name getElementId
  * @param element
  * @returns {*}
  */
@@ -235,6 +316,7 @@ SplitTester.prototype.getElementId = function (element) {
 /**
  * Tries to get the full Xpath for the element.
  *
+ * @name getXPath
  * @param element
  * @returns {string}
  */
@@ -250,6 +332,11 @@ SplitTester.prototype.getXPath = function (element) {
     return xpath;
 };
 
+/**
+ * Adds new variant to the Split Test in the modal.
+ *
+ * @name addVariant
+ */
 SplitTester.prototype.addVariant = function () {
     $variantsList = jQuery("#splittest-modal-variants");
     var numberOfVariants = $variantsList.find("div").length;
@@ -259,6 +346,12 @@ SplitTester.prototype.addVariant = function () {
     this.changeToVariant(numberOfVariants);
 };
 
+/**
+ * Changes selected variant to newly clicked.
+ *
+ * @name changeVariant
+ * @param $clicked
+ */
 SplitTester.prototype.changeVariant = function ($clicked) {
     /* Finds newly selected variant */
     var idArray = $clicked.attr("id").split("-");
@@ -267,6 +360,12 @@ SplitTester.prototype.changeVariant = function ($clicked) {
     this.changeToVariant(newlySelected);
 };
 
+/**
+ * Changes selected variant to the one of the passed position.
+ *
+ * @name changeToVariant
+ * @param newlySelected
+ */
 SplitTester.prototype.changeToVariant = function (newlySelected) {
     $textArea = jQuery("#splittest-modal-input");
 
@@ -290,6 +389,13 @@ SplitTester.prototype.changeToVariant = function (newlySelected) {
     this.changeSelectedBackground(previouslySelected, newlySelected);
 };
 
+/**
+ * Marks a new variant as selected.
+ *
+ * @name changeSelectedBackground
+ * @param from
+ * @param to
+ */
 SplitTester.prototype.changeSelectedBackground = function (from, to) {
     $from = jQuery("#splittest-modal-variant-" + from);
     $to = jQuery("#splittest-modal-variant-" + to);
@@ -300,6 +406,11 @@ SplitTester.prototype.changeSelectedBackground = function (from, to) {
     $to.css("color", "black");
 };
 
+/**
+ * Saves SplitTest into the database.
+ *
+ * @name postSplitTest
+ */
 SplitTester.prototype.postSplitTest = function () {
     var owner = this;
 
@@ -310,14 +421,17 @@ SplitTester.prototype.postSplitTest = function () {
         }
     });
 
-    console.log("TEST", requestBody);
-
     $.post("/splittest", requestBody).done(function (data) {
         data = JSON.parse(data);
         owner.postVariations(data.id);
     });
 };
 
+/**
+ * Saves SplitTest variations into the database.
+ *
+ * @param splitTestId
+ */
 SplitTester.prototype.postVariations = function (splitTestId) {
     this.changeToVariant(0);
 
@@ -326,6 +440,12 @@ SplitTester.prototype.postVariations = function (splitTestId) {
     }
 };
 
+/**
+ * Saves SplitTest variation into the database.
+ *
+ * @param variation
+ * @param splitTestId
+ */
 SplitTester.prototype.postVariation = function (variation, splitTestId) {
     var requestBody = JSON.stringify({
         variation: {
@@ -341,5 +461,6 @@ SplitTester.prototype.postVariation = function (variation, splitTestId) {
     });
 };
 
+/* Initializes */
 splitTester = new SplitTester();
 splitTester.startMouseListening();
