@@ -79,9 +79,9 @@ SplitTester.prototype.createMenu = function()
 {
     this.menu = jQuery(
         '<div id="splittest-menu">' +
-            '<img class="splittest-menu-item" src="img/test.png" width="25" heigth="25" />' +
-            '<img class="splittest-menu-item" src="img/test.png" width="25" heigth="25" />' +
-            '<a href="#splittest-modal" rel="modal:open"><img class="splittest-menu-item" src="img/test.png" width="25" heigth="25" /></a>' +
+            '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
+            '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
+            '<a href="#splittest-modal" rel="modal:open"><img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" /></a>' +
         '</div>'
     );
 
@@ -345,7 +345,7 @@ SplitTester.prototype.postVariations = function(splitTestId)
     for (i in this.variants) {
         this.postVariation(this.variants[i], splitTestId);
     }
-}
+};
 
 SplitTester.prototype.postVariation = function(variation, splitTestId)
 {
@@ -367,7 +367,7 @@ SplitTester.prototype.postVariation = function(variation, splitTestId)
             alert("Error while trying to save Variation.");
         }
     });
-}
+};
 
 splitTester = new SplitTester();
 splitTester.startMouseListening();
