@@ -31,7 +31,7 @@
 
 #splittest-modal {
     width: 700px;
-    height: 500px;
+    height: 520px;
     margin: 0 auto;
     display: none;
     background: rgba(100, 100, 100, 0.9);
@@ -90,4 +90,14 @@
     border: white 2px solid;
     vertical-align: middle;
     cursor: pointer;
+}
+
+#splittest-modal-bar {
+    clear: both;
+    width: 95%;
+    height: 10px;
+    cursor: pointer;
+    color: white;
+    text-align: right;
+    padding: 15px;
 }
