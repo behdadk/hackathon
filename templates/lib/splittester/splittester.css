@@ -1,0 +1,93 @@
+#selector-top, #selector-bottom {
+    background: blue;
+    height:3px;
+    position: fixed;
+    transition:all 300ms ease;
+    z-index: 999999;
+}
+#selector-left, #selector-right {
+    background: blue;
+    width:3px;
+    position: fixed;
+    transition:all 300ms ease;
+    z-index: 999999;
+}
+
+.n{
+    -webkit-transform: scale(3) translateX(100px)
+}
+
+.selected-split-test {
+    /*background-color: rgba(60,60,90,0.8) !important; */
+    border: blue 4px solid;
+    z-index: 99999999 !important;
+}
+
+#splittest-menu {
+    position: absolute;
+    margin: -10px 0 0 -50px;
+    z-index: 999999999;
+}
+
+#splittest-modal {
+    width: 700px;
+    height: 500px;
+    margin: 0 auto;
+    display: none;
+    background: rgba(100, 100, 100, 0.9);
+    z-index: 99999999999 !important;
+}
+
+#splittest-modal-menu {
+    float: left;
+    background: rgba(90, 90, 90, 0.9);
+    width: 30%;
+    height: 96%;
+    padding: 10px 5px;
+}
+
+#splittest-modal-code {
+    float: left;
+    width: 60%;
+    height: 100%;
+    padding: 10px;
+}
+
+#splittest-modal-variants {
+    clear: both;
+    width: 100%;
+    color: white;
+    height: 90%;
+}
+
+#splittest-modal-button-add {
+    clear: both;
+    width: 100%;
+    height: 10%;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    border: white 2px solid;
+    vertical-align: middle;
+}
+
+#splittest-modal-input {
+    background-color: transparent;
+    height: 95%;
+    width: 100%;
+    color: white;
+    border: none;
+}
+
+.splittest-modal-variant {
+    clear: both;
+    width: 100%;
+    height: 25px;
+    color: white;
+    font-size: 11px;
+    text-align: center;
+    border: white 2px solid;
+    vertical-align: middle;
+    cursor: pointer;
+}
