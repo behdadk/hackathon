@@ -43,4 +43,32 @@ $app->post("/variation", function () use ($app, $twig, $pdo) {
     echo json_encode($pdo->lastInsertId());
 });
 
+$app->get("/show/variation/:variation_id", function ($variationId) use ($pdo) {
+
+    // Load Variation Content;
+    $statement = $pdo->prepare("
+      SELECT st.ElementID, v.Content
+      FROM variation AS v
+      INNER JOIN splittest AS st ON v.SplitTest_ID = st.ID
+      WHERE v.ID = :id
+    ");
+    $statement->bindParam(":id", $variationId, \PDO::PARAM_INT);
+    $statement->execute();
+
+    $result = $statement->fetch();
+
+    if (!$result) {
+        throw new \Exception("Variation '" . $variationId . "' not found.");
+    }
+
+    $doc = phpQuery::newDocumentFileHTML(__DIR__ . "/templates/coolblue-static.html");
+
+    $element = pq($result["ElementID"]);
+
+    $element->html($result["Content"]);
+
+    echo phpQuery::getDocument($doc->getDocumentID());
+
+});
+
 $app->run();
