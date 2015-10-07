@@ -29,4 +29,18 @@ $app->post("/splittest", function () use ($app, $twig, $pdo) {
     echo json_encode($pdo->lastInsertId());
 });
 
+$app->post("/variation", function () use ($app, $twig, $pdo) {
+    $json = $app->request->getBody();
+
+    $content = json_decode($json, true);
+
+    $statement = $pdo->prepare("INSERT INTO variation (SplitTest_ID, Title, Content) VALUES (:splittest_id, :title, :content)");
+    $statement->bindParam(":splittest_id", $content["variation"]["splitTestID"], \PDO::PARAM_INT);
+    $statement->bindParam(":title", $content["variation"]["title"], \PDO::PARAM_STR);
+    $statement->bindParam(":content", $content["variation"]["content"], \PDO::PARAM_STR);
+    $statement->execute();
+
+    echo json_encode($pdo->lastInsertId());
+});
+
 $app->run();
