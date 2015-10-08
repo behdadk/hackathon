@@ -24,6 +24,12 @@ function SplitTester() {
     };
 
     this.setupModalEvents();
+
+    jQuery(document.body).on("click", "#splittest-menu-edit a", function() {
+        jQuery("#splittest-modal").modal({
+            closeText: ''
+        });
+    });
 }
 
 /**
@@ -42,7 +48,7 @@ SplitTester.prototype.setupModalEvents = function () {
         owner.addVariant();
     });
 
-    jQuery(document.body).on("click", "#splittest-modal-bar", function () {
+    jQuery(document.body).on("click", "#splittest-modal-save", function () {
         owner.postSplitTest();
     });
 };
@@ -79,12 +85,16 @@ SplitTester.prototype.createModal = function () {
 
     this.modal = jQuery(
         '<div id="splittest-modal">' +
-        '<div id="splittest-modal-bar">Save</div>' +
+        '<div id="splittest-modal-top-bar">' +
+            '<div id="splittest-modal-title">Edit Variants</div>' +
+            '<div id="splittest-modal-save" class="splittest-modal-top-item">Save</div>' +
+            '<div id="splittest-modal-close" class="splittest-modal-top-item"><a rel="modal:close">Close</a></div>' +
+        '</div>' +
         '<div id="splittest-modal-menu">' +
         '<div id="splittest-modal-variants">' +
         '<div id="splittest-modal-variant-0" class="splittest-modal-variant">Original</div>' +
+        '<div id="splittest-modal-button-add">+ add variant</div>' +
         '</div>' +
-        '<div id="splittest-modal-button-add">Add Variant</div>' +
         '</div>' +
         '<div id="splittest-modal-code"><textarea id="splittest-modal-input" name="splittest-modal-input"></textarea></div>' +
         '</div>'
@@ -108,7 +118,7 @@ SplitTester.prototype.createMenu = function () {
         '<div class="splittest-menu-item">3</div>' +
         '</div>' +
         '<div id="splittest-menu-edit" class="splittest-menu-sub">' +
-            '<div class="splittest-menu-item"><a href="#splittest-modal" rel="modal:open">Edit</a></div>' +
+            '<div class="splittest-menu-item"><a>Edit</a></div>' +
         '</div>' +
         '</div>'
     );
@@ -345,10 +355,11 @@ SplitTester.prototype.getXPath = function (element) {
  */
 SplitTester.prototype.addVariant = function () {
     $variantsList = jQuery("#splittest-modal-variants");
-    var numberOfVariants = $variantsList.find("div").length;
+    var numberOfVariants = $variantsList.find("div.splittest-modal-variant").length;
     $newVariant = jQuery('<div id="splittest-modal-variant-' + numberOfVariants + '" class="splittest-modal-variant">Variant ' + numberOfVariants + '</div>');
 
-    $variantsList.append($newVariant);
+    jQuery("#splittest-modal-button-add").before($newVariant);
+
     this.changeToVariant(numberOfVariants);
 };
 
@@ -406,10 +417,8 @@ SplitTester.prototype.changeSelectedBackground = function (from, to) {
     $from = jQuery("#splittest-modal-variant-" + from);
     $to = jQuery("#splittest-modal-variant-" + to);
 
-    $from.css("background-color", "");
-    $from.css("color", "white");
-    $to.css("background-color", "#aaa");
-    $to.css("color", "black");
+    $from.css("background-color", "#F0F0F0");
+    $to.css("background-color", "white");
 };
 
 /**
