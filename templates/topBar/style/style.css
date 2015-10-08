@@ -1,0 +1,106 @@
+body {
+  background: #fff;
+  color: #222;
+  cursor: auto;
+  font-family: "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.top-bar {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 50px;
+    background-color: #C2E3F7;
+    border-bottom: 1px solid #132863;
+}
+
+ul{
+    list-style-type: none;
+    margin: 0px;
+    padding: 0px;
+    
+}
+li {
+    float: left;
+    height: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-family: inherit;
+    font-weight: 500;
+    font-size: 13px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+li.testname {
+    width: 200px;
+    padding-left: 10px;
+    text-align: left;
+}
+.test-header{
+    font-weight: 800;
+    font-size: 13px;
+    width: 100%;
+    margin-top: 10px;
+}
+.test-live {
+    font-weight: 300;
+    font-size: 10px;
+    width: 100%;
+    margin: 0px;
+    margin-bottom: 10px;
+    color: #878787;
+}
+li:hover {
+    background-color: #B7D5E8;  
+}
+li.active {
+    background-color: #0E7BDC;
+    color: white;
+}
+    
+.new-button {
+    float: right;
+    background: #285dab;
+    background-clip: padding-box;
+    border: 1px solid #1e4680;
+    border-radius: 3px;
+    box-shadow: inset 0 -2px 0 0 #1e4680;
+    color: #fff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 13px;
+    height: auto;
+    line-height: 40px;
+    outline: none;
+    text-align: center;
+    text-decoration: none;
+    transition: background .1s linear;
+    margin-top: 5px;
+    padding: 0px 20px;
+    margin-right: 10px; 
+}
+
+.new-button:hover, .new-button:focus {
+    background: #1e4680;
+    border-color: #036;
+    box-shadow: inset 0 -2px 0 0 #036;
+    color: #fff;
+    text-decoration: none
+}
+
+.action:active, .cta-button:active, .action:visited:active, .cta-button:visited:active {
+    padding: 1.5rem 2rem 1.3rem;
+    box-shadow: none
+}
+

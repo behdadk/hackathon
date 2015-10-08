@@ -30,7 +30,7 @@ try {
  */
 $loader = new \Twig_Loader_Filesystem(__DIR__ . "/../templates/");
 $applicationConfiguration["twig"] = new \Twig_Environment($loader, array(
-    "cache" => __DIR__ . "/../cache/",
+
 ));
 
 return $applicationConfiguration;
