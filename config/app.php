@@ -29,7 +29,7 @@ try {
  * Twig template system.
  */
 $loader = new \Twig_Loader_Filesystem(__DIR__ . "/../templates/");
-$applicationConfiguration["twig"] = new \Twig_Environment($loader, array(
+$applicationConfiguration["twig"] = new \Twig_Environment($loader,[]);
 
 ));
 
