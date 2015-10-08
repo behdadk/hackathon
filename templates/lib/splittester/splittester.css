@@ -23,12 +23,6 @@
     z-index: 99999999 !important;
 }
 
-#splittest-menu {
-    position: absolute;
-    margin: -10px 0 0 -50px;
-    z-index: 999999999;
-}
-
 #splittest-modal {
     width: 700px;
     height: 520px;
@@ -104,4 +98,36 @@
 .close-modal, .close-modal:hover {
     text-decoration: none;
     color: white;
+}
+
+.splittest-menu-item {
+    float: left;
+    cursor: pointer;
+    border-left: 1px solid #7E7967;
+    padding: 2px 5px;
+}
+
+.splittest-menu-item:first-of-type {
+    border-left: none;
+}
+
+#splittest-menu {
+    margin: -10px 0 0 10px;
+    z-index: 999999999;
+    position: absolute;
+}
+
+.splittest-menu-sub {
+    padding: 5px 1px;
+    border: 1px solid #7E7967;
+    background-color: #FFF6D2;
+    float: left;
+    height: 100%;
+    margin: 0 5px;
+    border-radius: 3px;
+}
+
+#splittest-menu a, #splittest-menu a:hover {
+    color: black;
+    text-decoration: none;
 }

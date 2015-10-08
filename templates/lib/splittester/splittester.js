@@ -101,9 +101,15 @@ SplitTester.prototype.createModal = function () {
 SplitTester.prototype.createMenu = function () {
     this.menu = jQuery(
         '<div id="splittest-menu">' +
-        '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
-        '<img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" />' +
-        '<a href="#splittest-modal" rel="modal:open"><img class="splittest-menu-item" src="/templates/img/test.png" width="25" heigth="25" /></a>' +
+        '<div id="splittest-menu-variants" class="splittest-menu-sub">' +
+        '<div class="splittest-menu-item">C</div>' +
+        '<div class="splittest-menu-item">1</div>' +
+        '<div class="splittest-menu-item">2</div>' +
+        '<div class="splittest-menu-item">3</div>' +
+        '</div>' +
+        '<div id="splittest-menu-edit" class="splittest-menu-sub">' +
+            '<div class="splittest-menu-item"><a href="#splittest-modal" rel="modal:open">Edit</a></div>' +
+        '</div>' +
         '</div>'
     );
 
@@ -124,6 +130,7 @@ SplitTester.prototype.startMouseListening = function () {
     });
 
     $(document).click(function (event) {
+        event.preventDefault();
         owner.selectElement(event);
     });
 };
@@ -194,8 +201,8 @@ SplitTester.prototype.getOriginalContent = function (event) {
 SplitTester.prototype.showMenu = function (event) {
     targetPosition = event.target.getBoundingClientRect();
 
-    this.menu.css("left", targetPosition.right);
-    this.menu.css("top", targetPosition.bottom);
+    this.menu.css("left", targetPosition.left + jQuery(document).scrollLeft());
+    this.menu.css("top", targetPosition.bottom + jQuery(document).scrollTop());
     this.menu.show();
 };
 
@@ -280,10 +287,9 @@ SplitTester.prototype.applyRectangleMovement = function ($target) {
  * @param e
  */
 SplitTester.prototype.getElementPath = function (e) {
-    e.preventDefault();
     clickedElement = e.target;
 
-    var elementId = this.getElementId(clickedElement);
+    var elementId = this.getXPath(clickedElement);
 
     console.log(elementId);
 
