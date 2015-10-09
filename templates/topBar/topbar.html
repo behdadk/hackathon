@@ -12,10 +12,10 @@
                 <div class="test-header">SplitTest</div>
                 <div class="test-live">Live since: 12-09-2015</div>
             </li>
-            <li class="active">Variants</li>
-            <li>Stats</li>
+            <li id="menu-variants" class="active">Variants</li>
+            <li id="menu-stats">Stats</li>
             <li>Config</li>
-            <li>
+            <li id="page-search">
                 <input type="text" id="url" size="60" value="{{ url }}"/>
                 <input type="submit" class="new-button-flat" id="urlButton" value="GO"/>
             </li>
@@ -38,5 +38,24 @@
             $("iframe").attr("src", url);
         });
 
+        $("#menu-variants").click(function (event) {
+            event.preventDefault();
+
+            $("#menu-stats").removeClass("active");
+            $(this).addClass("active");
+
+            var url = "http://hackathon2015.coolblue/external/" + encodeURIComponent($("#url").val());
+            $("iframe").attr("src", url);
+        });
+
+        $("#menu-stats").click(function (event) {
+            event.preventDefault();
+
+            $("#menu-variants").removeClass("active");
+            $(this).addClass("active");
+
+            var url = "http://hackathon2015.coolblue/stats";
+            $("iframe").attr("src", url);
+        });
     });
 </script>

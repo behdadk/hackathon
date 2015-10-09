@@ -22,9 +22,14 @@ $app->get('/', function () use ($app, $twig) {
     echo $template->render(
         [
             "host" => "http://hackathon2015.coolblue/external/" . urlencode("www.pdashop.nl"),
-            "url"  => "www.coolblue.nl"
+            "url"  => "www.pdashop.nl"
         ]
     );
+});
+
+$app->get('/stats', function () use ($app, $twig) {
+    $template = $twig->loadTemplate('stats.html');
+    echo $template->render([]);
 });
 
 $app->post("/splittest", function () use ($app, $twig, $pdo) {

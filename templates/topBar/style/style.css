@@ -21,13 +21,13 @@ body {
     /*border-bottom: 1px solid #132863;*/
 }
 
-ul{
+.top-bar ul{
     list-style-type: none;
     margin: 0px;
     padding: 0px;
 
 }
-li {
+.top-bar li {
     float: left;
     height: 50px;
     padding-left: 30px;
@@ -39,19 +39,20 @@ li {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    cursor: pointer;
 }
-li.testname {
+.top-bar li.testname {
     width: 200px;
     padding-left: 10px;
     text-align: left;
 }
-.test-header{
+.top-bar .test-header{
     font-weight: 800;
     font-size: 13px;
     width: 100%;
     margin-top: 10px;
 }
-.test-live {
+.top-bar .test-live {
     font-weight: 300;
     font-size: 10px;
     width: 100%;
@@ -59,15 +60,15 @@ li.testname {
     margin-bottom: 10px;
     color: #878787;
 }
-li:hover {
+.top-bar li:hover {
     background-color: #B7D5E8;
 }
-li.active {
+.top-bar li.active {
     background-color: #0090e3;
     color: white;
 }
 
-.new-button {
+.top-bar .new-button {
     float: right;
     background: #285dab;
     background-clip: padding-box;
@@ -91,7 +92,7 @@ li.active {
     margin-right: 10px;
 }
 
-.new-button:hover, .new-button:focus {
+.top-bar .new-button:hover, .new-button:focus {
     background: #1e4680;
     border-color: #036;
     box-shadow: inset 0 -2px 0 0 #036;
@@ -99,7 +100,7 @@ li.active {
     text-decoration: none
 }
 
-.new-button-flat {
+.top-bar .new-button-flat {
     float: right;
     background: #285dab;
     background-clip: padding-box;
@@ -124,8 +125,8 @@ li.active {
     margin-right: 10px;
 }
 
-.new-button-flat:hover,
-.new-button-flat:focus {
+.top-bar .new-button-flat:hover,
+.top-bar .new-button-flat:focus {
     background: #1e4680;
     border-color: #036;
     box-shadow: inset 0 -2px 0 0 #036;
@@ -134,12 +135,15 @@ li.active {
 }
 
 
-.action:active, .cta-button:active, .action:visited:active, .cta-button:visited:active {
+.top-bar .action:active,
+.top-bar .cta-button:active,
+.top-bar .action:visited:active,
+.top-bar .cta-button:visited:active {
     padding: 1.5rem 2rem 1.3rem;
     box-shadow: none
 }
 
-.top-bar li:last-child {
+.top-bar .top-bar li:last-child {
     float:right;
     padding: 0;
 }
