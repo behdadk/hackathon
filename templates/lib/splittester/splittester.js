@@ -50,9 +50,14 @@ SplitTester.prototype.setupModalEvents = function () {
     });
 
     jQuery(document.body).on("click", "#splittest-modal-save", function () {
-        owner.postSplitTest();
 
-        $("#splittest-modal a").trigger("click");
+        /* Only save if there are variants */
+        if (owner.variants.length < 2) {
+            owner.postSplitTest();
+            $("#splittest-modal a").trigger("click");
+        } else {
+            alert("Please, add one or more variants to save a Split Test.");
+        }
     });
 };
 
