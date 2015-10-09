@@ -4,6 +4,7 @@
     "twig/twig": "~1.0",
     "guzzlehttp/guzzle": "^6.1",
     "zendframework/zend-dom": "^2.5",
-    "querypath/QueryPath": "^3.0"
+    "querypath/QueryPath": "^3.0",
+    "electrolinux/phpquery": "*"
   }
 }

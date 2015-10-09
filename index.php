@@ -21,8 +21,8 @@ $app->get('/', function () use ($app, $twig) {
     $template = $twig->loadTemplate('topBar/topbar.html');
     echo $template->render(
         [
-            "host" => "http://192.168.43.76/external/".urlencode("http://www.pdashop.nl"),
-            "url" => "blah"
+            "host" => "http://hackathon2015.coolblue/external/".urlencode("www.pdashop.nl"),
+            "url" => "www.coolblue.nl"
         ]
     );
 });
@@ -112,12 +112,30 @@ $app->get("/external/:url", function ($url) {
 
 });
 
-$app->get("/replace", function () {
+$app->get("/show/external/variation/:variation_id", function () use($pdo) {
+
+    // Load Variation Content;
+    $statement = $pdo->prepare("
+      SELECT st.URL, st.ElementID, v.Content
+      FROM variation AS v
+      INNER JOIN splittest AS st ON v.SplitTest_ID = st.ID
+      WHERE v.ID = :id
+    ");
+    $statement->bindParam(":id", $variationId, \PDO::PARAM_INT);
+    $statement->execute();
+
 
     $client = new GuzzleHttp\Client([]);
 
     $response = $client->request('GET', "http://www.coolblue.nl");
     $contentBody = $response->getBody();
+
+
+
+    $result = $statement->fetch();
+
+
+
 
 //    $document = new Zend\Dom\Document($contentBody);
 //    $dom = new Query();

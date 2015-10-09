@@ -25,10 +25,11 @@ function SplitTester() {
 
     this.setupModalEvents();
 
-    jQuery(document.body).on("click", "#splittest-menu-edit a", function() {
+    jQuery(document.body).on("click", "#splittest-menu-edit a", function () {
         jQuery("#splittest-modal").modal({
             closeText: ''
         });
+        $("#splittest-modal").css("top", "25%");
     });
 }
 
@@ -50,6 +51,8 @@ SplitTester.prototype.setupModalEvents = function () {
 
     jQuery(document.body).on("click", "#splittest-modal-save", function () {
         owner.postSplitTest();
+
+        $("#splittest-modal a").trigger("click");
     });
 };
 
@@ -86,9 +89,9 @@ SplitTester.prototype.createModal = function () {
     this.modal = jQuery(
         '<div id="splittest-modal">' +
         '<div id="splittest-modal-top-bar">' +
-            '<div id="splittest-modal-title">Edit Variants</div>' +
-            '<div id="splittest-modal-save" class="splittest-modal-top-item">Save</div>' +
-            '<div id="splittest-modal-close" class="splittest-modal-top-item"><a rel="modal:close">Close</a></div>' +
+        '<div id="splittest-modal-title">Edit Variants</div>' +
+        '<div id="splittest-modal-save" class="splittest-modal-top-item">Save</div>' +
+        '<div id="splittest-modal-close" class="splittest-modal-top-item"><a rel="modal:close">Close</a></div>' +
         '</div>' +
         '<div id="splittest-modal-menu">' +
         '<div id="splittest-modal-variants">' +
@@ -118,7 +121,7 @@ SplitTester.prototype.createMenu = function () {
         '<div class="splittest-menu-item">3</div>' +
         '</div>' +
         '<div id="splittest-menu-edit" class="splittest-menu-sub">' +
-            '<div class="splittest-menu-item"><a>Edit</a></div>' +
+        '<div class="splittest-menu-item"><a>Edit</a></div>' +
         '</div>' +
         '</div>'
     );

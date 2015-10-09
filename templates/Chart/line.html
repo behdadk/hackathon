@@ -1,11 +1,11 @@
 <!doctype html>
 <html>
 	<head>
-		<title>Line Chart</title>
+		<title>Coolblue Hackathon 2015! | Demo</title>
 		<script src="src/Chart.js"></script>
         <link rel="stylesheet" href="style/style.css">	</head>
 	<body>
-        
+
         <section class="content">
             <div class="chart-header">Unique views</div>
             <div class="chart">
@@ -19,7 +19,7 @@
 
 
 	<script>
-        
+
         function getRandColor(brightness){
             //6 levels of brightness from 0 to 5, 0 being the darkest
             var rgb = [Math.random() * 256, Math.random() * 256, Math.random() * 256];
@@ -78,11 +78,11 @@
 
 	window.onload = function(){
 		var ctx = document.getElementById("simplechart").getContext("2d");
-        
+
 		var myLine = new Chart(ctx).Line(lineChartData, {
 			responsive: true
 		});
-        
+
         document.getElementById('js-legend').innerHTML = myLine.generateLegend();
 	}
 	</script>
