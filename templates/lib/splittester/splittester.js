@@ -11,9 +11,10 @@ function SplitTester() {
     this.selectedVariant = 0;
     this.variants = [];
     this.elementID;
+    this.currentElement;
+    this.splitTests = {};
 
     this.createRectangle();
-    this.createMenu();
     this.createModal();
 
     this.elements = {
@@ -24,12 +25,13 @@ function SplitTester() {
     };
 
     this.setupModalEvents();
+    this.setupMenuEvents();
 
     jQuery(document.body).on("click", "#splittest-menu-edit a", function () {
         jQuery("#splittest-modal").modal({
             closeText: ''
         });
-        $("#splittest-modal").css("top", "25%");
+//        $("#splittest-modal").css("top", "25%");
     });
 }
 
@@ -51,6 +53,8 @@ SplitTester.prototype.setupModalEvents = function () {
 
     jQuery(document.body).on("click", "#splittest-modal-save", function () {
 
+        owner.changeToVariant(0);
+
         /* Only save if there are variants */
         if (owner.variants.length > 1) {
             owner.postSplitTest();
@@ -58,6 +62,14 @@ SplitTester.prototype.setupModalEvents = function () {
         } else {
             alert("Please, add one or more variants to save a Split Test.");
         }
+    });
+};
+
+SplitTester.prototype.setupMenuEvents = function() {
+    var owner = this;
+
+    jQuery(document.body).on("click", "#splittest-menu-variants .splittest-menu-item", function () {
+        owner.showVariantInPage(jQuery(this));
     });
 };
 
@@ -91,6 +103,14 @@ SplitTester.prototype.createModal = function () {
         $existingModal.remove();
     }
 
+    var variants = "";
+
+    if (this.variants !== undefined && this.variants != null) {
+        for (i = 1; i < this.variants.length; i++) {
+            variants += '<div id="splittest-modal-variant-'+i+'" class="splittest-modal-variant">Variant '+i+'</div>';
+        }
+    }
+
     this.modal = jQuery(
         '<div id="splittest-modal">' +
         '<div id="splittest-modal-top-bar">' +
@@ -101,6 +121,7 @@ SplitTester.prototype.createModal = function () {
         '<div id="splittest-modal-menu">' +
         '<div id="splittest-modal-variants">' +
         '<div id="splittest-modal-variant-0" class="splittest-modal-variant">Original</div>' +
+            variants +
         '<div id="splittest-modal-button-add">+ add variant</div>' +
         '</div>' +
         '</div>' +
@@ -117,13 +138,20 @@ SplitTester.prototype.createModal = function () {
  * @name createMenu
  */
 SplitTester.prototype.createMenu = function () {
+
+    var menuItems = "";
+
+    if (this.variants !== undefined && this.variants != null) {
+        for (i = 1; i < this.variants.length; i++) {
+            menuItems += '<div class="splittest-menu-item">'+i+'</div>';
+        }
+    }
+
     this.menu = jQuery(
         '<div id="splittest-menu">' +
         '<div id="splittest-menu-variants" class="splittest-menu-sub">' +
         '<div class="splittest-menu-item">C</div>' +
-        '<div class="splittest-menu-item">1</div>' +
-        '<div class="splittest-menu-item">2</div>' +
-        '<div class="splittest-menu-item">3</div>' +
+            menuItems +
         '</div>' +
         '<div id="splittest-menu-edit" class="splittest-menu-sub">' +
         '<div class="splittest-menu-item"><a>Edit</a></div>' +
@@ -163,28 +191,58 @@ SplitTester.prototype.selectElement = function (event) {
     var owner = this;
     var $target = jQuery(event.target);
 
-    /* If a menu button was clicked or modal is opened, don't select anything */
+    /* If a menu button was clicked or modal is opened, don't do anything */
     if ($target.hasClass("splittest-menu-item") ||
+        $target.attr("id") == "splittest-modal-save" ||
+        $target.attr("rel") == "modal:close" ||
         jQuery("#splittest-modal").is(":visible")) {
         return;
     }
 
+
     var hasSelectedElements = jQuery(".selected-split-test").length;
     this.unselectAllElements();
 
-    /* If anything was selected, they're already unselected */
+    /* If anything was found to be selected, don't worry.
+    They've just been unselected a couple of lines ago */
     if (hasSelectedElements) {
-        this.menu.hide();
+        this.saveCurrentTest();
+        this.unselectCurrentTest();
+        this.hideMenu();
         return;
     }
 
-    /* Nothing was selected, so select it */
+    /* Nothing was selected, so select the clicked element */
     jQuery("#selector").hide();
     $target.addClass("selected-split-test");
-    owner.showMenu(event);
+    var elementID = owner.getElementPath(event);
+    owner.switchToTest(elementID);
     owner.getOriginalContent(event);
-    owner.getElementPath(event);
+    owner.showMenu(event);
 };
+
+SplitTester.prototype.switchToTest = function(elementID)
+{;
+    this.saveCurrentTest();
+
+    /* Ensures variants for this test */
+    if (this.splitTests[elementID] === undefined) {
+        this.splitTests[elementID] = [];
+    }
+
+    /* Changes */
+    this.variants = this.splitTests[elementID];
+    this.elementID = elementID;
+
+};
+
+SplitTester.prototype.saveCurrentTest = function()
+{
+    /* Save previous one, if any */
+    if (this.variants && this.variants !== undefined && this.variants != []) {
+        this.splitTests[this.elementID] = this.variants;
+    }
+}
 
 /**
  * Unselects all selected elements.
@@ -205,7 +263,7 @@ SplitTester.prototype.unselectAllElements = function () {
 SplitTester.prototype.getOriginalContent = function (event) {
     this.createModal();
     this.changeToVariant(0);
-    this.originalVariant = event.target.outerHTML;
+    this.originalVariant = event.target.outerHTML.replace("selected-split-test", "");
     this.variants[0] = this.originalVariant;
     jQuery("#splittest-modal-input").val(this.originalVariant);
 };
@@ -217,6 +275,7 @@ SplitTester.prototype.getOriginalContent = function (event) {
  * @param event
  */
 SplitTester.prototype.showMenu = function (event) {
+    this.createMenu();
     targetPosition = event.target.getBoundingClientRect();
 
     this.menu.css("left", targetPosition.left + jQuery(document).scrollLeft());
@@ -307,6 +366,7 @@ SplitTester.prototype.applyRectangleMovement = function ($target) {
 SplitTester.prototype.getElementPath = function (e) {
     clickedElement = e.target;
 
+    this.currentElement = jQuery(clickedElement);
     var elementId = this.getXPath(clickedElement);
 
     console.log(elementId);
@@ -314,10 +374,11 @@ SplitTester.prototype.getElementPath = function (e) {
     if (!elementId) {
         alert("This element cannot be selected. Please, try another one.");
         this.unselectAllElements();
-        this.menu.hide();
+        this.unselectCurrentTest();
+        this.hideMenu();
     }
 
-    this.elementID = elementId;
+    return elementId;
 };
 
 /**
@@ -456,8 +517,6 @@ SplitTester.prototype.postSplitTest = function () {
  * @param splitTestId
  */
 SplitTester.prototype.postVariations = function (splitTestId) {
-    this.changeToVariant(0);
-
     for (i = 1; i < this.variants.length; i++) {
         this.postVariation(this.variants[i], splitTestId);
     }
@@ -470,6 +529,9 @@ SplitTester.prototype.postVariations = function (splitTestId) {
  * @param splitTestId
  */
 SplitTester.prototype.postVariation = function (variation, splitTestId) {
+
+    var owner = this;
+
     var requestBody = JSON.stringify({
         variation: {
             splitTestID: splitTestId,
@@ -480,8 +542,39 @@ SplitTester.prototype.postVariation = function (variation, splitTestId) {
 
     $.post("/variation", requestBody).done(function (data) {
         data = JSON.parse(data);
-        console.log(data);
+        if (data.id) {
+            owner.addVariantToMenu(variation);
+        }
     });
+};
+
+SplitTester.prototype.addVariantToMenu = function(variant)
+{
+    console.log("addVariantToMenu");
+    $menuItems = jQuery("#splittest-menu-variants .splittest-menu-item");
+    $lastMenuItem = $menuItems.last();
+    var numberOfMenuItems = $menuItems.length;
+
+    $newMenuItem = jQuery('<div class="splittest-menu-item">'+numberOfMenuItems+'</div>');
+    $lastMenuItem.after($newMenuItem);
+};
+
+SplitTester.prototype.showVariantInPage = function($clicked) {
+    var variantPosition = $clicked.html().split(" ").slice(-1).pop();
+
+    if (isNaN(variantPosition)) {
+        variantPosition = 0;
+    }
+
+    this.currentElement.html(this.variants[variantPosition]);
+};
+
+SplitTester.prototype.hideMenu = function() {
+    this.menu.remove();
+};
+
+SplitTester.prototype.unselectCurrentTest = function() {
+    this.variants = [];
 };
 
 /* Initializes */
