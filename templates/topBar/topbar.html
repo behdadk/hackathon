@@ -30,12 +30,9 @@
 
 <script>
     $(function () {
-
         $("#urlButton").click(function (event) {
             event.preventDefault();
-
-            var url = "http://hackathon2015.coolblue/external/" + encodeURI($("#url").val());
-
+            var url = "http://hackathon2015.coolblue/external/" + encodeURIComponent($("#url").val());
             $("iframe").attr("src", url);
         });
 
