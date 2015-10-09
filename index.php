@@ -1,6 +1,6 @@
 <?php
 
-date_default_timezone_set ("Europe/Amsterdam");
+date_default_timezone_set("Europe/Amsterdam");
 
 require_once(__DIR__ . "/vendor/autoload.php");
 
@@ -21,8 +21,8 @@ $app->get('/', function () use ($app, $twig) {
     $template = $twig->loadTemplate('topBar/topbar.html');
     echo $template->render(
         [
-            "host" => "http://hackathon2015.coolblue/external/".urlencode("www.pdashop.nl"),
-            "url" => "www.coolblue.nl"
+            "host" => "http://hackathon2015.coolblue/external/" . urlencode("www.pdashop.nl"),
+            "url"  => "www.coolblue.nl"
         ]
     );
 });
@@ -40,6 +40,32 @@ $app->post("/splittest", function () use ($app, $twig, $pdo) {
     $response = array(
         'id' => (int)$pdo->lastInsertId()
     );
+
+    echo json_encode($response);
+});
+
+$app->get("/variation/:url/:elementid", function ($url, $elementID) use ($pdo) {
+    $statement = $pdo->prepare("
+        SELECT st.ID AS splitTestID, v.ID AS variationID, v.Content AS content
+        FROM variation AS v
+        INNER JOIN splittest AS st ON v.SplitTest_ID = st.ID
+        WHERE st.URL = :url
+          AND st.ElementID = :element_id
+    ");
+    $statement->bindParam(":url", $url, \PDO::PARAM_STR);
+    $statement->bindParam(":element_id", $elementID, \PDO::PARAM_STR);
+    $statement->execute();
+
+    $result = $statement->fetchAll();
+
+    $response = array();
+    foreach ($result as $variation) {
+        $response[] = array(
+            "splitTestID" => $variation["splitTestID"],
+            "variationID" => $variation["variationID"],
+            "content"     => $variation["content"],
+        );
+    }
 
     echo json_encode($response);
 });
@@ -112,7 +138,7 @@ $app->get("/external/:url", function ($url) {
 
 });
 
-$app->get("/show/external/variation/:variation_id", function () use($pdo) {
+$app->get("/show/external/variation/:variation_id", function () use ($pdo) {
 
     // Load Variation Content;
     $statement = $pdo->prepare("
@@ -131,10 +157,7 @@ $app->get("/show/external/variation/:variation_id", function () use($pdo) {
     $contentBody = $response->getBody();
 
 
-
     $result = $statement->fetch();
-
-
 
 
 //    $document = new Zend\Dom\Document($contentBody);
