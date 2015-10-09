@@ -4,8 +4,6 @@ date_default_timezone_set("Europe/Amsterdam");
 
 require_once(__DIR__ . "/vendor/autoload.php");
 
-use Zend\Dom\Document\Query;
-
 $config = include(__DIR__ . "/config/app.php");
 
 $app = new \Slim\Slim();
@@ -143,47 +141,44 @@ $app->get("/external/:url", function ($url) {
 
 });
 
-$app->get("/show/external/variation/:variation_id", function () use ($pdo) {
 
-    // Load Variation Content;
+$app->get("/replace/:variation_id", function ($variation_id) use ($pdo, $app) {
+
     $statement = $pdo->prepare("
-      SELECT st.URL, st.ElementID, v.Content
+      SELECT st.ElementID, v.Content, st.URL
       FROM variation AS v
       INNER JOIN splittest AS st ON v.SplitTest_ID = st.ID
       WHERE v.ID = :id
     ");
-    $statement->bindParam(":id", $variationId, \PDO::PARAM_INT);
+
+    $statement->bindParam(":id", $variation_id, \PDO::PARAM_INT);
     $statement->execute();
 
+    $result = $statement->fetchAll();
+
+    if (count($result) == 0) {
+        $app->notFound();
+        return;
+    }
+
+    $result = $result[0];
+    $hostUrl = $result["URL"];
+    $htmlContent = $result["Content"];
+    $xpath = $result["ElementID"];
 
     $client = new GuzzleHttp\Client([]);
 
-    $response = $client->request('GET', "http://www.coolblue.nl");
+    $response = $client->request('GET', $hostUrl, ['allow_redirects' => true]);
     $contentBody = $response->getBody();
 
-
-    $result = $statement->fetch();
-
-
-//    $document = new Zend\Dom\Document($contentBody);
-//    $dom = new Query();
-//    $result = $dom->execute('//*[@id="js-footer"]/div[1]/div/div/div/div[2]/ul/li[1]/a', $document);
-
-    print '<pre>';
-
-    /** @var Zend\Dom\Document\NodeList $result */
-    /** @var DOMElement $r */
-
-//    $result->offsetSet(0, new DOMElement("h1", "BLAH"));
     libxml_use_internal_errors(true);
-//        print htmlqp($contentBody->getContents(), '//*[@id="js-footer"]/div[1]/div/div/div/div[2]/ul/li[1]/a');
-    $x = new QueryPath\DOMQuery($contentBody->getContents());
-    $a = $x->xpath('//*[@id="js-footer"]/div[1]/div/div/div/div[2]/ul/li[3]/a/span[2]/strong');
+    $html = new \QueryPath\DOMQuery($htmlContent);
+    $page = new \QueryPath\DOMQuery($contentBody->getContents());
 
-    print_r($a->f);
+    $domQuery = $page->xpath($xpath);
+    $domQuery->replaceWith($html);
 
-//    print $document->getStringDocument();
-
+    $domQuery->writeHTML();
 });
 
 $app->run();

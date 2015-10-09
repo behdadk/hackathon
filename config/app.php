@@ -22,13 +22,13 @@ try {
         )
     );
 } catch (\Exception $e) {
-    $applicationConfiguration["pdo"] = false;
+//    print_r($e);
 }
 
 /**
  * Twig template system.
  */
 $loader = new \Twig_Loader_Filesystem(__DIR__ . "/../templates/");
-$applicationConfiguration["twig"] = new \Twig_Environment($loader, []);
+$applicationConfiguration["twig"] = new \Twig_Environment($loader,[]);
 
 return $applicationConfiguration;
