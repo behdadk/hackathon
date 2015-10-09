@@ -52,7 +52,7 @@ SplitTester.prototype.setupModalEvents = function () {
     jQuery(document.body).on("click", "#splittest-modal-save", function () {
 
         /* Only save if there are variants */
-        if (owner.variants.length < 2) {
+        if (owner.variants.length > 1) {
             owner.postSplitTest();
             $("#splittest-modal a").trigger("click");
         } else {
